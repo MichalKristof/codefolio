@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AuthController;
 
 Route::middleware('web')->group(function () {
     Route::inertia('/', 'Home')->name('home');
     Route::inertia('/register', 'Auth/Register')->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
 });
 
 
