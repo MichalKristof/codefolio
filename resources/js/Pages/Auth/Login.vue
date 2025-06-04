@@ -1,44 +1,51 @@
 <template>
+
     <Head :title="` | ${$page.component}`"/>
-    <h1 class="title">Register</h1>
+    <h1 class="title">Login</h1>
     <div class="w-2/4 mx-auto">
         <form @submit.prevent="submit">
-            <TextInput name="name" v-model="form.name" :message="form.errors.name"/>
             <TextInput name="email" v-model="form.email" type="email" :message="form.errors.email"/>
             <TextInput name="password" v-model="form.password" type="password" :message="form.errors.password"/>
-            <TextInput name="confirm password" v-model="form.password_confirmation" type="password"/>
+
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="remember" v-model="form.remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <p class="text-slate-600">Not a user ?
+                    <Link :href="route('register')" class="text-link">Register</Link>
+                </p>
+            </div>
             <div>
-                <p class="text-slate-600 mb-2">Already a user ? <a href="#" class="text-link">Login</a></p>
                 <button type="submit" class="primary-btn" :disabled="form.processing">
-                    Register
+                    Login
                 </button>
             </div>
         </form>
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import {useForm} from '@inertiajs/vue3';
-import TextInput from "../../Pages/Components/TextInput.vue";
-import {route} from "../../../../vendor/tightenco/ziggy/src/js/index.js";
+import TextInput from "../Components/TextInput.vue";
 
 const form = useForm({
-    name: null,
     email: null,
     password: null,
-    password_confirmation: null
+    remember: false,
 })
 
 const submit = () => {
-    form.post(route('register'), {
+    form.post(route('login'), {
         onSuccess: () => {
             form.reset();
         },
         onError: () => {
-            form.reset('password', 'password_confirmation');
+            form.reset('password', 'remember');
         }
     });
 }
+
 </script>
 
 <style lang="scss" scoped>

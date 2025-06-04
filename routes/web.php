@@ -1,17 +1,25 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\AuthController;
 
-Route::middleware('web')->group(function () {
+Route::middleware('guest')->group(function () {
     Route::inertia('/', 'Home')->name('home');
     Route::inertia('/register', 'Auth/Register')->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', RegisterController::class)->name('register');
+    Route::inertia('/login', 'Auth/Login')->name('login');
+    Route::post('/login', LoginController::class)->name('login');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', LogoutController::class)->name('logout');
+    Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
+});
 
 
 Route::get('/info', function () {
